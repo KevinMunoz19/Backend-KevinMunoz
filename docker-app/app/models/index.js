@@ -23,5 +23,15 @@ db.sequelize = sequelize;
 db.tutorials = require('./tutorial.model')(sequelize, Sequelize);
 db.transactions = require('./transaction.model')(sequelize, Sequelize);
 db.users = require('./user.model')(sequelize, Sequelize);
+db.accounts = require('./account.model')(sequelize, Sequelize);
+
+db.users.hasMany(db.accounts, {
+  foreignKey: 'userId',
+  as: 'accounts',
+});
+db.accounts.belongsTo(db.users, {
+  foreignKey: 'userId',
+  as: 'user',
+});
 
 module.exports = db;

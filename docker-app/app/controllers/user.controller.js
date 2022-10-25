@@ -72,7 +72,10 @@ exports.findOne = async (req, res) => {
       });
       return;
     }
-    const user = await User.findOne({ where: { userEmail }, raw: true });
+    const user = await User.findOne({
+      where: { userEmail },
+      include: ['accounts'],
+    });
     console.log('user', user);
     if (user && (await bcrypt.compare(userPassword, user.userPassword))) {
       // Create token
