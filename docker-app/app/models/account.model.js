@@ -17,6 +17,12 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.DECIMAL(10, 5),
       allowNull: false,
     },
+    accountNumber: {
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
+      allowNull: false,
+      unique: true,
+    },
   });
 
   return Account;

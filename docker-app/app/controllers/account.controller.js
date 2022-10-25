@@ -2,6 +2,7 @@
 const db = require('../models');
 
 const Account = db.accounts;
+const User = db.users;
 
 // Create and Save a new Tutorial
 exports.create = async (req, res) => {
@@ -37,4 +38,19 @@ exports.create = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+};
+
+exports.findAccountsById = (req, res) => {
+  const { id } = req.params;
+  return User.findByPk(id, { include: ['accounts'] })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      res.status(500).send({
+        message: `Error retrieving accounts with userId=${id}`,
+      });
+    });
 };
