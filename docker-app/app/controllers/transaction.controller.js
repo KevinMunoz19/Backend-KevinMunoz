@@ -1,25 +1,77 @@
+/* eslint-disable consistent-return */
 const db = require('../models');
 
 const Transaction = db.transactions;
+const Account = db.accounts;
 const { Op } = db.Sequelize;
 
 // Create and Save a new Tutorial
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   // Validate request
+  const {
+    accountNameFrom,
+    accountIdFrom,
+    accountNameTo,
+    accountIdTo,
+    transactionAmount,
+    transactionComments,
+    transactionType,
+  } = req.body;
   if (
-    !req.body.accountNameFrom ||
-    !req.body.accountIdFrom ||
-    !req.body.accountNameTo ||
-    !req.body.accountIdTo ||
-    !req.body.transactionAmount ||
-    !req.body.transactionComments ||
-    !req.body.transactionType
+    !accountNameFrom ||
+    !accountIdFrom ||
+    !accountNameTo ||
+    !accountIdTo ||
+    !transactionAmount ||
+    !transactionComments ||
+    !transactionType
   ) {
     res.status(400).send({
       message: 'Content is missing.',
     });
     return;
   }
+
+  const accountFrom = await Account.findOne({
+    raw: true,
+    where: { accountNumber: accountIdFrom },
+  });
+  const accountTo = await Account.findOne({
+    raw: true,
+    where: { accountNumber: accountIdTo },
+  });
+  if (!accountFrom || !accountTo) {
+    return res.status(409).send('Account does not exists');
+  }
+
+  const transactionAmountDecimal = +(+transactionAmount).toFixed(5);
+  let accountFromBalance = +(+accountFrom.accountBalance).toFixed(5);
+
+  if (accountFromBalance < transactionAmountDecimal) {
+    return res.status(409).send('Not enough funds available');
+  }
+
+  let accountToBalance = +(+accountTo.accountBalance).toFixed(5);
+
+  accountFromBalance -= transactionAmountDecimal;
+  accountFromBalance = +(+accountFromBalance).toFixed(5);
+
+  accountToBalance += transactionAmountDecimal;
+  accountToBalance = +(+accountToBalance).toFixed(5);
+
+  await Account.update(
+    { accountBalance: accountFromBalance },
+    {
+      where: { accountNumber: accountIdFrom },
+    }
+  );
+
+  await Account.update(
+    { accountBalance: accountToBalance },
+    {
+      where: { accountNumber: accountIdTo },
+    }
+  );
 
   // Create a Tutorial
   const transaction = {
@@ -36,15 +88,13 @@ exports.create = (req, res) => {
 
   // Save Tutorial in the database
   Transaction.create(transaction)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
+    .then((dataTransaction) => res.send(dataTransaction))
+    .catch((err) =>
       res.status(500).send({
         message:
           err.message || 'Some error occurred while creating the Transaction.',
-      });
-    });
+      })
+    );
 };
 
 // Retrieve all Tutorials from the database.

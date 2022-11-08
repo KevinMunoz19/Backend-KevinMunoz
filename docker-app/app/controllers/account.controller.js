@@ -1,6 +1,7 @@
 /* eslint-disable consistent-return */
 const db = require('../models');
 
+const { Op } = db.Sequelize;
 const Account = db.accounts;
 const User = db.users;
 
@@ -52,5 +53,25 @@ exports.findAccountsById = (req, res) => {
       res.status(500).send({
         message: `Error retrieving accounts with userId=${id}`,
       });
+    });
+};
+
+exports.findAccountByNumber = (accountNumber) => {
+  const condition = accountNumber
+    ? { id: { [Op.like]: `%${accountNumber}%` } }
+    : null;
+
+  Account.findAll({ where: condition })
+    .then((data) => ({
+      data,
+      success: true,
+    }))
+    .catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      return {
+        data: err,
+        success: true,
+      };
     });
 };
