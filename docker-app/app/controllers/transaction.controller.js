@@ -5,7 +5,7 @@ const Transaction = db.transactions;
 const Account = db.accounts;
 const { Op } = db.Sequelize;
 
-// Create and Save a new Tutorial
+// Create and Save
 exports.create = async (req, res) => {
   // Validate request
   const {
@@ -73,7 +73,7 @@ exports.create = async (req, res) => {
     }
   );
 
-  // Create a Tutorial
+  // Create
   const transaction = {
     accountNameFrom: req.body.accountNameFrom,
     accountIdFrom: req.body.accountIdFrom,
@@ -86,7 +86,6 @@ exports.create = async (req, res) => {
     transactionType: req.body.transactionType,
   };
 
-  // Save Tutorial in the database
   Transaction.create(transaction)
     .then((dataTransaction) => res.send(dataTransaction))
     .catch((err) =>

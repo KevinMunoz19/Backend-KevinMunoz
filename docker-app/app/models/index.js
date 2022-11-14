@@ -24,12 +24,22 @@ db.tutorials = require('./tutorial.model')(sequelize, Sequelize);
 db.transactions = require('./transaction.model')(sequelize, Sequelize);
 db.users = require('./user.model')(sequelize, Sequelize);
 db.accounts = require('./account.model')(sequelize, Sequelize);
+db.records = require('./record.model')(sequelize, Sequelize);
 
 db.users.hasMany(db.accounts, {
   foreignKey: 'userId',
   as: 'accounts',
 });
 db.accounts.belongsTo(db.users, {
+  foreignKey: 'userId',
+  as: 'user',
+});
+
+db.users.hasMany(db.records, {
+  foreignKey: 'userId',
+  as: 'records',
+});
+db.records.belongsTo(db.users, {
   foreignKey: 'userId',
   as: 'user',
 });

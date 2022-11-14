@@ -22,6 +22,7 @@ require('./app/routes/tutorial.routes')(app);
 require('./app/routes/transaction.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/account.routes')(app);
+require('./app/routes/record.routes')(app);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
