@@ -4,7 +4,7 @@ const transactions = require('../controllers/transaction.controller');
 
 module.exports = (app) => {
   // Create a new Tutorial
-  router.post('/', transactions.create);
+  router.post('/create', transactions.create);
 
   // Retrieve all Tutorials
   // router.get('/', auth, transactions.findAll);

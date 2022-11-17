@@ -9,18 +9,14 @@ const { Op } = db.Sequelize;
 exports.create = async (req, res) => {
   // Validate request
   const {
-    accountNameFrom,
     accountIdFrom,
-    accountNameTo,
     accountIdTo,
     transactionAmount,
     transactionComments,
     transactionType,
   } = req.body;
   if (
-    !accountNameFrom ||
     !accountIdFrom ||
-    !accountNameTo ||
     !accountIdTo ||
     !transactionAmount ||
     !transactionComments ||
@@ -75,9 +71,9 @@ exports.create = async (req, res) => {
 
   // Create
   const transaction = {
-    accountNameFrom: req.body.accountNameFrom,
+    accountNameFrom: accountFrom.accountName,
     accountIdFrom: req.body.accountIdFrom,
-    accountNameTo: req.body.accountNameTo,
+    accountNameTo: accountTo.accountName,
     accountIdTo: req.body.accountIdTo,
     transactionAmount: req.body.transactionAmount,
     transactionComments: req.body.transactionComments
