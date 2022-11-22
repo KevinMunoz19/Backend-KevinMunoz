@@ -44,4 +44,13 @@ db.records.belongsTo(db.users, {
   as: 'user',
 });
 
+db.users.hasMany(db.transactions, {
+  foreignKey: 'userId',
+  as: 'transactions',
+});
+db.transactions.belongsTo(db.users, {
+  foreignKey: 'userId',
+  as: 'user',
+});
+
 module.exports = db;

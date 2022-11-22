@@ -14,13 +14,15 @@ exports.create = async (req, res) => {
     transactionAmount,
     transactionComments,
     transactionType,
+    userId,
   } = req.body;
   if (
     !accountIdFrom ||
     !accountIdTo ||
     !transactionAmount ||
     !transactionComments ||
-    !transactionType
+    !transactionType ||
+    !userId
   ) {
     res.status(400).send({
       message: 'Content is missing.',
@@ -80,6 +82,7 @@ exports.create = async (req, res) => {
       ? req.body.transactionComments
       : 'None',
     transactionType: req.body.transactionType,
+    userId: req.body.userId,
   };
 
   Transaction.create(transaction)
@@ -94,7 +97,9 @@ exports.create = async (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-  Transaction.findAll({ where: null })
+  const { id } = req.params;
+  const condition = id ? { userId: { [Op.like]: `%${id}%` } } : null;
+  Transaction.findAll({ where: condition })
     .then((data) => {
       res.send(data);
     })
