@@ -1,14 +1,13 @@
 const router = require('express').Router();
 const records = require('../controllers/record.controller');
-// const auth = require('../middleware/auth');
+const auth = require('../middleware/auth');
 
 module.exports = (app) => {
   // Create a new Tutorial
-  router.post('/create', records.create);
+  router.post('/create', auth, records.create);
 
   // Retrieve all Tutorials
-  // router.get('/', auth, transactions.findAll);
-  router.get('/:id', records.findAll);
+  router.get('/getAll', auth, records.findAll);
 
   app.use('/api/records', router);
 };

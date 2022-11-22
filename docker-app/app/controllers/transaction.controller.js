@@ -7,6 +7,7 @@ const { Op } = db.Sequelize;
 
 // Create and Save
 exports.create = async (req, res) => {
+  const id = req.userId;
   // Validate request
   const {
     accountIdFrom,
@@ -14,18 +15,22 @@ exports.create = async (req, res) => {
     transactionAmount,
     transactionComments,
     transactionType,
-    userId,
   } = req.body;
   if (
     !accountIdFrom ||
     !accountIdTo ||
     !transactionAmount ||
     !transactionComments ||
-    !transactionType ||
-    !userId
+    !transactionType
   ) {
     res.status(400).send({
       message: 'Content is missing.',
+    });
+    return;
+  }
+  if (!id) {
+    res.status(401).send({
+      message: 'Auth is missing',
     });
     return;
   }
@@ -82,7 +87,7 @@ exports.create = async (req, res) => {
       ? req.body.transactionComments
       : 'None',
     transactionType: req.body.transactionType,
-    userId: req.body.userId,
+    userId: id,
   };
 
   Transaction.create(transaction)
@@ -97,7 +102,14 @@ exports.create = async (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-  const { id } = req.params;
+  console.log(req);
+  const id = req.userId;
+  if (!id) {
+    res.status(401).send({
+      message: 'Auth is missing',
+    });
+    return;
+  }
   const condition = id ? { userId: { [Op.like]: `%${id}%` } } : null;
   Transaction.findAll({ where: condition })
     .then((data) => {
@@ -107,24 +119,6 @@ exports.findAll = (req, res) => {
       res.status(500).send({
         message:
           err.message || 'Some error occurred while retrieving transactions.',
-      });
-    });
-};
-
-// Find a single Tutorial with an id
-exports.findOne = (req, res) => {
-  const { id } = req.params;
-  const condition = id ? { id: { [Op.like]: `%${id}%` } } : null;
-
-  Transaction.findAll({ where: condition })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      // eslint-disable-next-line no-console
-      console.log(err);
-      res.status(500).send({
-        message: `Error retrieving Transaction with id=${id}`,
       });
     });
 };

@@ -15,18 +15,23 @@ exports.create = async (req, res) => {
     recordComments,
     recordCategory,
     recordIsExpense,
-    userId,
   } = req.body;
+  const id = req.userId;
   if (
     !recordAccountId ||
     !recordAmount ||
     !recordComments ||
     !recordCategory ||
-    typeof recordIsExpense === 'undefined' ||
-    !userId
+    typeof recordIsExpense === 'undefined'
   ) {
     res.status(400).send({
       message: 'Content is missing.',
+    });
+    return;
+  }
+  if (!id) {
+    res.status(400).send({
+      message: 'Authentication is needed.',
     });
     return;
   }
@@ -69,7 +74,7 @@ exports.create = async (req, res) => {
     recordCategory: req.body.recordCategory,
     recordComments: req.body.recordComments ? req.body.recordComments : 'None',
     recordIsExpense: req.body.recordIsExpense,
-    userId: req.body.userId,
+    userId: id,
   };
 
   Record.create(record)
@@ -84,7 +89,13 @@ exports.create = async (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-  const { id } = req.params;
+  const id = req.userId;
+  if (!id) {
+    res.status(401).send({
+      message: 'Auth is missing',
+    });
+    return;
+  }
   const condition = id ? { userId: { [Op.like]: `%${id}%` } } : null;
   Record.findAll({ where: condition })
     .then((data) => {

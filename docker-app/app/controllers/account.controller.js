@@ -1,18 +1,24 @@
 /* eslint-disable consistent-return */
 const db = require('../models');
 
-const { Op } = db.Sequelize;
 const Account = db.accounts;
 const User = db.users;
 
 // Create and Save a new Tutorial
 exports.create = async (req, res) => {
+  const id = req.userId;
   // Validate request
   try {
-    const { accountCurrency, accountName, accountBalance, userId } = req.body;
-    if (!accountCurrency || !accountName || !accountBalance || !userId) {
+    const { accountCurrency, accountName, accountBalance } = req.body;
+    if (!accountCurrency || !accountName || !accountBalance) {
       res.status(400).send({
         message: 'Content is missing.',
+      });
+      return;
+    }
+    if (!id) {
+      res.status(401).send({
+        message: 'Auth is missing',
       });
       return;
     }
@@ -22,7 +28,7 @@ exports.create = async (req, res) => {
       accountCurrency,
       accountName,
       accountBalance,
-      userId,
+      userId: id,
     };
 
     // Save Tutorial in the database
@@ -42,7 +48,13 @@ exports.create = async (req, res) => {
 };
 
 exports.findAccountsById = (req, res) => {
-  const { id } = req.params;
+  const id = req.userId;
+  if (!id) {
+    res.status(401).send({
+      message: 'Auth is missing',
+    });
+    return;
+  }
   return User.findByPk(id, { include: ['accounts'] })
     .then((data) => {
       res.send(data);
@@ -53,25 +65,5 @@ exports.findAccountsById = (req, res) => {
       res.status(500).send({
         message: `Error retrieving accounts with userId=${id}`,
       });
-    });
-};
-
-exports.findAccountByNumber = (accountNumber) => {
-  const condition = accountNumber
-    ? { id: { [Op.like]: `%${accountNumber}%` } }
-    : null;
-
-  Account.findAll({ where: condition })
-    .then((data) => ({
-      data,
-      success: true,
-    }))
-    .catch((err) => {
-      // eslint-disable-next-line no-console
-      console.log(err);
-      return {
-        data: err,
-        success: true,
-      };
     });
 };
