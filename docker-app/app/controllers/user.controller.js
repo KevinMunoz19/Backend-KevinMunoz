@@ -83,7 +83,7 @@ exports.findOne = async (req, res) => {
         { user_id: user.userId, userEmail },
         process.env.TOKEN_KEY,
         {
-          expiresIn: '2h',
+          expiresIn: '1h',
         }
       );
 
