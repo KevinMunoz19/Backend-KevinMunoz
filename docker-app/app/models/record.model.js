@@ -9,6 +9,10 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    recordAccountName: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
     recordDate: {
       type: Sequelize.DATE,
       defaultValue: Sequelize.NOW,

@@ -64,6 +64,7 @@ exports.create = async (req, res) => {
   // Create
   const record = {
     recordAccountId: req.body.recordAccountId,
+    recordAccountName: accountFrom.accountName,
     recordAmount: req.body.recordAmount,
     recordCategory: req.body.recordCategory,
     recordComments: req.body.recordComments ? req.body.recordComments : 'None',
@@ -91,8 +92,7 @@ exports.findAll = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || 'Some error occurred while retrieving transactions.',
+        message: err.message || 'Some error occurred while retrieving records.',
       });
     });
 };
