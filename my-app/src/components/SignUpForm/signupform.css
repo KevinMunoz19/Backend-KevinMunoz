@@ -1,0 +1,16 @@
+.body {
+    background-color: rgb(208, 163, 163);
+}
+
+.textinputcontainer{
+    padding:1rem;
+}
+
+.textinput{
+    width: 20rem;
+}
+
+.formcard{
+    padding:2rem;
+    width:25;
+}

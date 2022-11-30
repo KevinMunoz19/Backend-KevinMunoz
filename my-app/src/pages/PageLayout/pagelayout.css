@@ -1,0 +1,11 @@
+.body {
+    padding: 1rem;
+}
+.header {
+    background-color: rgb(21, 169, 51);
+}
+.footer {
+    background-color: #3F0071;
+    padding: 1rem;
+    bottom: 0;
+}

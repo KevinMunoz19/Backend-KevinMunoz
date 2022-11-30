@@ -28,6 +28,12 @@ services:
       - DB_PORT=$MYSQLDB_DOCKER_PORT
     stdin_open: true
     tty: true
+  front:
+    depends_on:
+      - app
+    build: ./my-app
+    ports:
+      - 4001:3000
 
 volumes: 
   db:
