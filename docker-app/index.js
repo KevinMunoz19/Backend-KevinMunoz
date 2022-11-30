@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const app = express();
 require('dotenv').config();
 
-const PORT = process.env.NODE_DOCKER_PORT || 8081;
+const PORT = process.env.NODE_DOCKER_PORT || 8080;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -18,7 +18,6 @@ app.get('/', (request, response) => {
   response.send('Hi there');
 });
 
-require('./app/routes/tutorial.routes')(app);
 require('./app/routes/transaction.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/account.routes')(app);

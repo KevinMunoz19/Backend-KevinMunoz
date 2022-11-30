@@ -20,7 +20,6 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.tutorials = require('./tutorial.model')(sequelize, Sequelize);
 db.transactions = require('./transaction.model')(sequelize, Sequelize);
 db.users = require('./user.model')(sequelize, Sequelize);
 db.accounts = require('./account.model')(sequelize, Sequelize);
