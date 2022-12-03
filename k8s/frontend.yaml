@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: front-app
-        image: kevinmunoz97/frontend:fs-frontend
+        image: kevinmunoz97/frontend:fs-frontend-gcp
         env:
         - name: REACT_APP_BACKEND_BASE_URL
           value: 'http://localhost:3800'
