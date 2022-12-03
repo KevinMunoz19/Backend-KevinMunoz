@@ -1,4 +1,4 @@
-export const apiBaseUrl = 'http://localhost:6868/api'
+export const apiBaseUrl = process.env.REACT_APP_BACKEND_BASE_URL+'/api'
 export const apiTransactionsUrl = '/transactions'
 export const apiAccountsUrl = '/accounts'
 export const apiUsersUrl = '/users'

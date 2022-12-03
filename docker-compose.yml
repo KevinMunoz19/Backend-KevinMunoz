@@ -33,7 +33,7 @@ services:
       - app
     build: ./my-app
     ports:
-      - 4001:3000
+      - 80:80
 
 volumes: 
   db:
